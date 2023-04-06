@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockMarket.Domain.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockMarket.Data", "StockMarket.Data\StockMarket.Data.csproj", "{912160FD-A247-4187-9AE8-5B4FB65F59EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockMarket.Data.Tests", "StockMarket.Data.Tests\StockMarket.Data.Tests.csproj", "{96661B11-77DF-4CDF-8446-EF7B6EEB6441}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockMarket.Data.Tests", "StockMarket.Data.Tests\StockMarket.Data.Tests.csproj", "{96661B11-77DF-4CDF-8446-EF7B6EEB6441}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockMarket.API", "StockMarket.API\StockMarket.API.csproj", "{77A2BE72-0AF5-40EC-B068-2D08A61D3B24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{96661B11-77DF-4CDF-8446-EF7B6EEB6441}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96661B11-77DF-4CDF-8446-EF7B6EEB6441}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96661B11-77DF-4CDF-8446-EF7B6EEB6441}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77A2BE72-0AF5-40EC-B068-2D08A61D3B24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77A2BE72-0AF5-40EC-B068-2D08A61D3B24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77A2BE72-0AF5-40EC-B068-2D08A61D3B24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77A2BE72-0AF5-40EC-B068-2D08A61D3B24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
