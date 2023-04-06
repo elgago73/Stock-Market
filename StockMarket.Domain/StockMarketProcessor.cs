@@ -6,6 +6,7 @@ using StockMarket.Domain.Comparers;
 
 namespace StockMarket.Domain
 {
+    //amiram :)
     public abstract class StockMarketProcessor
     {
         private long lastOrderId;
