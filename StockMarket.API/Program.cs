@@ -1,4 +1,6 @@
 using StockMarket.API.Controllers;
+using StockMarket.Service;
+using StockMarket.Service.Contract;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
-﻿namespace StockMarket.API
+﻿namespace StockMarket.Service.Contract
 {
-    public class Order
+    public class OrderResponse
     {
 
         public long Id { get; set; }

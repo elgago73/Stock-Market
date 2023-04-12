@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using StockMarket.Service.Contract;
 
 namespace StockMarket.API.Controllers
 {
@@ -15,9 +16,9 @@ namespace StockMarket.API.Controllers
         }
 
         [HttpGet (Name = "GetAllOrders")]
-        public IEnumerable<Order> GetAllOrders()
+        public IEnumerable<OrderResponse> GetAllOrders()
         {
-            return stockMarketService.GetAllOrderes();
+            return stockMarketService.GetAllOrdersAsync();
         }
     }
 }
