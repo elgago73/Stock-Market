@@ -1,4 +1,4 @@
-﻿using StockMarket.Domain;
+﻿using StockMarket.Domain.Reposities;
 using StockMarket.Service.Contract;
 
 namespace StockMarket.Service
@@ -21,10 +21,10 @@ namespace StockMarket.Service
             return orders.Select(o => o.ToData());
         }
 
-        public async Task<OrderResponse> GetOrderAsync(long id)
+        public async Task<OrderResponse?> GetOrderAsync(long id)
         {
             var order = await orderReadRepository.GetOrderAsync(id);
-            return order.ToData();
+            return order?.ToData();
 
         }
     }

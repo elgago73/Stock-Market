@@ -11,7 +11,7 @@ namespace StockMarket.Data.Tests
         public StockMarketContextFixture()
         {
             var optionsBuilder = new DbContextOptionsBuilder<StockMarketDbContext>();
-            optionsBuilder.UseSqlServer("server=.\\sqlexpress;database=StockMarketTests;MultipleActiveResultSets=true;trusted_connection=true;encrypt=yes;trustservercertificate=yes;");
+            optionsBuilder.UseSqlServer("server=.\\sqlexpress;database=StockMarketTest;MultipleActiveResultSets=true;trusted_connection=true;encrypt=yes;trustservercertificate=yes;");
             optionsBuilder.LogTo(msg => Output?.WriteLine(msg));
             Context = new StockMarketDbContext(optionsBuilder.Options);
             Context.Database.EnsureDeleted();

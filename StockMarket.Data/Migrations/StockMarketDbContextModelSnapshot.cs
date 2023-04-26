@@ -38,6 +38,11 @@ namespace StockMarket.Data.Migrations
                     b.Property<int>("Side")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
@@ -59,6 +64,11 @@ namespace StockMarket.Data.Migrations
 
                     b.Property<long>("SellOrderId")
                         .HasColumnType("bigint");
+
+                    b.Property<byte[]>("version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 

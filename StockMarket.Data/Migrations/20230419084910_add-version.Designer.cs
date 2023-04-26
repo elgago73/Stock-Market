@@ -11,8 +11,8 @@ using StockMarket.Data;
 namespace StockMarket.Data.Migrations
 {
     [DbContext(typeof(StockMarketDbContext))]
-    [Migration("20230320152345_init")]
-    partial class init
+    [Migration("20230419084910_add-version")]
+    partial class addversion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,11 @@ namespace StockMarket.Data.Migrations
                     b.Property<int>("Side")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
@@ -62,6 +67,11 @@ namespace StockMarket.Data.Migrations
 
                     b.Property<long>("SellOrderId")
                         .HasColumnType("bigint");
+
+                    b.Property<byte[]>("version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 

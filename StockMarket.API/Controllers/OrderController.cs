@@ -9,6 +9,7 @@ namespace StockMarket.API.Controllers
     {
         private readonly ILogger<OrderController> _logger;
         private readonly IStockMarketService stockMarketService;
+
         public OrderController(ILogger<OrderController> logger, IStockMarketService stockMarketService)
         {
             _logger = logger;
@@ -16,9 +17,9 @@ namespace StockMarket.API.Controllers
         }
 
         [HttpGet (Name = "GetAllOrders")]
-        public IEnumerable<OrderResponse> GetAllOrders()
+        public async Task<IEnumerable<OrderResponse>> GetAllOrdersAsync()
         {
-            return stockMarketService.GetAllOrdersAsync();
+            return await stockMarketService.GetAllOrdersAsync();
         }
     }
 }
