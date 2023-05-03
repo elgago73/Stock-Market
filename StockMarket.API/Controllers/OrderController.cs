@@ -5,7 +5,7 @@ namespace StockMarket.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class OrderController: ControllerBase
+    public class OrderController : ControllerBase
     {
         private readonly ILogger<OrderController> _logger;
         private readonly IStockMarketService stockMarketService;
@@ -16,10 +16,16 @@ namespace StockMarket.API.Controllers
             this.stockMarketService = stockMarketService;
         }
 
-        [HttpGet (Name = "GetAllOrders")]
+        [HttpGet(Name = "GetAllOrders")]
         public async Task<IEnumerable<OrderResponse>> GetAllOrdersAsync()
         {
             return await stockMarketService.GetAllOrdersAsync();
+        }
+
+        [HttpPost(Name = "AddOrder")]
+        public async Task<long> AddOrderAsync([FromBody] AddOrderRequest order)
+        {
+            return await stockMarketService.AddOrderAsync(order);
         }
     }
 }
