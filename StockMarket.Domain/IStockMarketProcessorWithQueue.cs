@@ -1,6 +1,6 @@
 ﻿namespace StockMarket.Domain
 {
-    public interface IStockMarketProcessorWithQueue
+    public interface IStockMarketProcessorWithQueue: IStockMarketProcessor
     {
         Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity);
         Task<long> CancelOrderAsync(long orderId);

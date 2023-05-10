@@ -1,7 +1,7 @@
 ﻿using StockMarket.Domain;
 using System.Linq.Expressions;
 
-namespace StockMarket.Domain.Reposities
+namespace StockMarket.Domain.Repositories
 {
     public interface IOrderReadRepository
     {

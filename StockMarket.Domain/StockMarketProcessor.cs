@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using StockMarket.Domain.Comparers;
 
 [assembly: InternalsVisibleTo("StockMarket.Domain.Tests")]
@@ -7,10 +9,11 @@ using StockMarket.Domain.Comparers;
 namespace StockMarket.Domain
 {
     //amiram :)
-    public abstract class StockMarketProcessor
+    public abstract class StockMarketProcessor : IStockMarketProcessor
     {
         private long lastOrderId;
         private long lastTradeId;
+        private MatchContext resultContext;
         private readonly List<Order> orders;
         private readonly List<Trade> trades;
         private readonly PriorityQueue<Order, Order> buyOrders;
@@ -18,6 +21,8 @@ namespace StockMarket.Domain
 
         public IEnumerable<Order> Orders => orders;
         public IEnumerable<Trade> Trades => trades;
+
+        public MatchContext? ResultContext => resultContext;
 
         internal StockMarketProcessor(List<Order>? orders = null, long lastOrderId = 0, long lastTradeId = 0)
         {
@@ -27,7 +32,7 @@ namespace StockMarket.Domain
             trades = new();
             buyOrders = new(new MaxComparer());
             sellOrders = new(new MinComparer());
-
+            resultContext = new MatchContext();
             foreach (var order in this.orders)
             {
                 enqueueOrder(order);
@@ -36,7 +41,9 @@ namespace StockMarket.Domain
 
         internal long EnqueueOrder(TradeSide side, decimal price, decimal quantity)
         {
+            resultContext = new();
             var order = makeOrder(side, price, quantity);
+            resultContext.createdOrder = order;
             enqueueOrder(order);
             return order.Id;
         }
@@ -112,15 +119,20 @@ namespace StockMarket.Domain
             var minQuantity = Math.Min(matchingOrders.SellOrder.Quantity, matchingOrders.BuyOrder.Quantity);
 
             Interlocked.Increment(ref lastTradeId);
-            trades.Add(new Trade(
+            var trade = new Trade(
                 id: lastTradeId,
                 sellOrderId: matchingOrders.SellOrder.Id,
                 buyOrderId: matchingOrders.BuyOrder.Id,
                 price: matchingOrders.SellOrder.Price,
-                quantity: minQuantity));
+                quantity: minQuantity);
 
+            trades.Add(trade);
             matchingOrders.SellOrder.DecreaseQuantity(minQuantity);
             matchingOrders.BuyOrder.DecreaseQuantity(minQuantity);
+
+            resultContext?.createdTrades.Add(trade);
+            resultContext?.updatedOrders.Add(matchingOrders.BuyOrder);
+            resultContext?.updatedOrders.Add(matchingOrders.SellOrder);
         }
 
         private static (Order SellOrder, Order BuyOrder) findOrders(Order order1, Order order2)

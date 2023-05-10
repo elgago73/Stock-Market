@@ -5,6 +5,7 @@ using StockMarket.Domain.Reposities;
 using StockMarket.Data.Repositories;
 using StockMarket.Service;
 using StockMarket.Service.Contract;
+using StockMarket.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,11 +15,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IStockMarketProcessorFactory, StockMarketProcessorFactory>();
 builder.Services.AddScoped<IStockMarketService, StockMarketService>();
 builder.Services.AddDbContext<StockMarketDbContext>(b => b.UseSqlServer("server=.\\sqlexpress;database=StockMarketTest;MultipleActiveResultSets=true;trusted_connection=true;encrypt=yes;trustservercertificate=yes;"));
 builder.Services.AddScoped<IOrderReadRepository, OrderReadRepository>();
 builder.Services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
+builder.Services.AddSingleton<IStockMarketProcessorFactory, StockMarketProcessorFactroy>();
+builder.Services.AddScoped<ITradeReadRepository, TradeReadRepository>();
+
 
 var app = builder.Build();
 

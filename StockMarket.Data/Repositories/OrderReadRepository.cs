@@ -4,6 +4,7 @@ using StockMarket.Domain.Reposities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,16 @@ namespace StockMarket.Data.Repositories
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
             return await dbContext.Orders.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<List<Order>> GetAllOrdersAsync(Expression<Func<Order, bool>> prerdicate)
+        {
+               return await dbContext.Orders.AsNoTracking().Where(prerdicate).ToListAsync();
+        }
+
+        public async Task<long> GetLastOrderIdAsync()
+        {
+            return await dbContext.Orders.MaxAsync(t => (long?)t.Id) ?? 0;
         }
     }
 }
