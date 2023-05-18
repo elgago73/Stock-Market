@@ -17,9 +17,9 @@ builder.Services.AddScoped<IStockMarketService, StockMarketService>();
 builder.Services.AddDbContext<StockMarketDbContext>(b => b.UseSqlServer("server=.\\sqlexpress;database=StockMarket;MultipleActiveResultSets=true;trusted_connection=true;encrypt=yes;trustservercertificate=yes;"));
 builder.Services.AddScoped<IOrderReadRepository, OrderReadRepository>();
 builder.Services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
-builder.Services.AddSingleton<IStockMarketProcessorFactory, StockMarketProcessorFactroy>();
 builder.Services.AddScoped<ITradeReadRepository, TradeReadRepository>();
 builder.Services.AddScoped<ITradeWriteRepository, TradeWriteRepository>();
+builder.Services.AddSingleton<IStockMarketProcessorFactory, StockMarketProcessorFactroy>();
 
 
 var app = builder.Build();

@@ -17,13 +17,14 @@ namespace StockMarket.Service
         //singelton and factory design patterns
         public StockMarketService(IOrderReadRepository orderReadRepository,
                                   IOrderWriteRepository orderWriteRepository,
-                                  IStockMarketProcessorFactory stockMarketProcessorFactory,
                                   ITradeReadRepository tradeReadRepository,
-                                  ITradeWriteRepository tradeWriteRepository)
+                                  ITradeWriteRepository tradeWriteRepository,
+                                  IStockMarketProcessorFactory stockMarketProcessorFactory)
         {
             this.orderReadRepository = orderReadRepository;
             this.orderWriteRepository = orderWriteRepository;
             this.tradeWriteRepository = tradeWriteRepository;
+            this.tradeReadRepository = tradeReadRepository;
             stockMarketProcessor = stockMarketProcessorFactory.GetStockMarketProcessorAsync(orderReadRepository, tradeReadRepository);
             stockMarketProcessor.OpenMarket();
         }
@@ -40,7 +41,7 @@ namespace StockMarket.Service
 
             var result = stockMarketProcessor.GetContextBy(refId);
 
-            if(result?.CreatedOrder != null) await orderWriteRepository.AddAsync(result.CreatedOrder);
+            if (result?.CreatedOrder != null) await orderWriteRepository.AddAsync(result.CreatedOrder);
             await orderWriteRepository.UpdateAsync(result.UpdatedOrders);
             await tradeWriteRepository.AddAsync(result.CreatedTrades);
             await orderWriteRepository.SaveChangesAsync();
@@ -49,19 +50,19 @@ namespace StockMarket.Service
 
         public async Task<IEnumerable<OrderResponse>> GetAllOrdersAsync()
         {
-            var orders = await orderReadRepository.GetAllOrdersAsync();
+            var orders = await orderReadRepository.GetAllAsync();
             return orders.Select(o => o.ToData());
         }
 
         public async Task<IEnumerable<TradeResponse>> GetAllTradesAsync()
         {
-            var trades = await tradeReadRepository.GetAllTradesAsync();
+            var trades = await tradeReadRepository.GetAllAsync();
             return trades.Select(t => t.ToData());
         }
 
         public async Task<OrderResponse?> GetOrderAsync(long id)
         {
-            var order = await orderReadRepository.GetOrderAsync(id);
+            var order = await orderReadRepository.GetAsync(id);
             return order?.ToData();
 
         }

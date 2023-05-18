@@ -14,22 +14,22 @@ namespace StockMarket.Data.Repositories
             this.dbContext = dbContext;
         }
 
-        public async Task<Order?> GetOrderAsync(long id)
+        public async Task<Order?> GetAsync(long id)
         {
             return await dbContext.Orders.AsNoTracking().SingleOrDefaultAsync(o => o.Id == id);
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        public async Task<IEnumerable<Order>> GetAllAsync()
         {
             return await dbContext.Orders.AsNoTracking().ToListAsync();
         }
 
-        public async Task<List<Order>> GetAllOrdersAsync(Expression<Func<Order, bool>> prerdicate)
+        public async Task<List<Order>> GetAllAsync(Expression<Func<Order, bool>> prerdicate)
         {
                return await dbContext.Orders.AsNoTracking().Where(prerdicate).ToListAsync();
         }
 
-        public async Task<long> GetLastOrderIdAsync()
+        public async Task<long> GetLastIdAsync()
         {
             return await dbContext.Orders.MaxAsync(t => (long?)t.Id) ?? 0;
         }

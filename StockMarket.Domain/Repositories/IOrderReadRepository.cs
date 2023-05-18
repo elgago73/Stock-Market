@@ -5,9 +5,9 @@ namespace StockMarket.Domain.Repositories
 {
     public interface IOrderReadRepository
     {
-        Task<IEnumerable<Order>> GetAllOrdersAsync();
-        Task<Order?> GetOrderAsync(long id);
-        Task<List<Order>> GetAllOrdersAsync(Expression<Func<Order, bool>> prerdicate);
-        Task<long> GetLastOrderIdAsync();
+        Task<IEnumerable<Order>> GetAllAsync();
+        Task<Order?> GetAsync(long id);
+        Task<List<Order>> GetAllAsync(Expression<Func<Order, bool>> prerdicate);
+        Task<long> GetLastIdAsync();
     }
 }

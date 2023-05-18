@@ -15,9 +15,9 @@ namespace StockMarket.Service
             lock (lockObject)
             {
                 if (processor != null) return processor;
-                var orders = orderReadRepository.GetAllOrdersAsync(o => !o.IsCanceled && o.Quantity > 0).GetAwaiter().GetResult();
-                var lastOrderId = orderReadRepository.GetLastOrderIdAsync().GetAwaiter().GetResult();
-                var lastTradeId = tradeReadRepository.GetLastTradeIdAsync().GetAwaiter().GetResult();
+                var orders = orderReadRepository.GetAllAsync(o => !o.IsCanceled && o.Quantity > 0).GetAwaiter().GetResult();
+                var lastOrderId = orderReadRepository.GetLastIdAsync().GetAwaiter().GetResult();
+                var lastTradeId = tradeReadRepository.GetLastIdAsync().GetAwaiter().GetResult();
                 processor = new StockMarketProcessorWithState(orders, lastOrderId, lastTradeId);
                 return processor;
             }

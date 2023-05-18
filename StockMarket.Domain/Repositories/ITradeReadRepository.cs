@@ -3,7 +3,7 @@
     public interface ITradeReadRepository
     {
 
-        Task<IEnumerable<Trade>> GetAllTradesAsync();
-        Task<long> GetLastTradeIdAsync();
+        Task<IEnumerable<Trade>> GetAllAsync();
+        Task<long> GetLastIdAsync();
     }
 }

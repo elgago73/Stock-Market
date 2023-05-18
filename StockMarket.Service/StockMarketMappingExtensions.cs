@@ -4,8 +4,9 @@ using StockMarket.Service.Contract;
 
 namespace StockMarket.Service
 {
-    internal static class StockMarketMappingExtensions {
-        internal static OrderResponse ToData(this Order order) 
+    internal static class StockMarketMappingExtensions
+    {
+        internal static OrderResponse ToData(this Order order)
         {
             return new OrderResponse
             {
@@ -17,7 +18,7 @@ namespace StockMarket.Service
             };
 
         }
-    internal static TradeResponse ToData(this Trade trade) 
+        internal static TradeResponse ToData(this Trade trade)
         {
             return new TradeResponse
             {
@@ -28,8 +29,6 @@ namespace StockMarket.Service
                 Quantity = trade.Quantity
 
             };
-
         }
-    
     }
 }

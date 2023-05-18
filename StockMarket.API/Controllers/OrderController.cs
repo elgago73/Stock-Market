@@ -7,12 +7,10 @@ namespace StockMarket.API.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly ILogger<OrderController> _logger;
         private readonly IStockMarketService stockMarketService;
 
-        public OrderController(ILogger<OrderController> logger, IStockMarketService stockMarketService)
+        public OrderController(IStockMarketService stockMarketService)
         {
-            _logger = logger;
             this.stockMarketService = stockMarketService;
         }
 
