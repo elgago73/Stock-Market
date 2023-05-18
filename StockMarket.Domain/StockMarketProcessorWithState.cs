@@ -28,9 +28,9 @@ namespace StockMarket.Domain
             state.CloseMarket();
         }
 
-        public override async Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity)
+        public override async Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity, Guid? refId = null)
         {
-            return await state.EnqueueOrderAsync(side, price, quantity);
+            return await state.EnqueueOrderAsync(side, price, quantity, refId);
         }
 
         public override async Task<long> CancelOrderAsync(long orderId)
@@ -53,9 +53,9 @@ namespace StockMarket.Domain
             state = new CloseState(this);
         }
 
-        internal async Task<long> enqueueOrderAsync(TradeSide side, decimal price, decimal quantity)
+        internal async Task<long> enqueueOrderAsync(TradeSide side, decimal price, decimal quantity, Guid? refId = null)
         {
-            return await base.EnqueueOrderAsync(side, price, quantity);
+            return await base.EnqueueOrderAsync(side, price, quantity, refId);
         }
 
         internal async Task<long> cancelOrderAsync(long orderId)

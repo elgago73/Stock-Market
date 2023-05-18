@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StockMarket.Domain;
 using StockMarket.Domain.Repositories;
 
-namespace StockMarket.Data
+namespace StockMarket.Data.Repositories
 {
     public class TradeReadRepository : ITradeReadRepository
     {
@@ -11,6 +12,12 @@ namespace StockMarket.Data
         {
             this.dbContext = dbContext;
         }
+        public async Task<IEnumerable<Trade>> GetAllTradesAsync()
+        {
+            return await dbContext.Trades.AsNoTracking().ToListAsync();
+
+        }
+
         public async Task<long> GetLastTradeIdAsync()
         {
             // MaxAsync vs LastAsync ?

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using StockMarket.Domain.Comparers;
@@ -13,16 +14,14 @@ namespace StockMarket.Domain
     {
         private long lastOrderId;
         private long lastTradeId;
-        private MatchContext resultContext;
         private readonly List<Order> orders;
         private readonly List<Trade> trades;
         private readonly PriorityQueue<Order, Order> buyOrders;
         private readonly PriorityQueue<Order, Order> sellOrders;
+        private ConcurrentDictionary<Guid, MatchContext> contexts;
 
         public IEnumerable<Order> Orders => orders;
         public IEnumerable<Trade> Trades => trades;
-
-        public MatchContext? ResultContext => resultContext;
 
         internal StockMarketProcessor(List<Order>? orders = null, long lastOrderId = 0, long lastTradeId = 0)
         {
@@ -32,19 +31,25 @@ namespace StockMarket.Domain
             trades = new();
             buyOrders = new(new MaxComparer());
             sellOrders = new(new MinComparer());
-            resultContext = new MatchContext();
+            contexts = new();
             foreach (var order in this.orders)
             {
                 enqueueOrder(order);
             }
         }
-
-        internal long EnqueueOrder(TradeSide side, decimal price, decimal quantity)
+        public MatchContext? GetContextBy(Guid refId)
         {
-            resultContext = new();
+            contexts.TryGetValue(refId, out var value);
+            return value;
+        }
+
+        internal long EnqueueOrder(TradeSide side, decimal price, decimal quantity, Guid? refId = null)
+        {
+            var context = new MatchContext();
             var order = makeOrder(side, price, quantity);
-            resultContext.createdOrder = order;
-            enqueueOrder(order);
+            context.createdOrder = order;
+            enqueueOrder(order, context);
+            if (refId.HasValue) contexts.TryAdd(refId.Value, context);
             return order.Id;
         }
 
@@ -70,7 +75,7 @@ namespace StockMarket.Domain
             return order;
         }
 
-        private void enqueueOrder(Order order)
+        private void enqueueOrder(Order order, MatchContext? context = null)
         {
             if (order.Side == TradeSide.Buy)
             {
@@ -78,7 +83,8 @@ namespace StockMarket.Domain
                 order: order,
                 orders: buyOrders,
                 matchingOrders: sellOrders,
-                comparePriceDelegate: (decimal price1, decimal price2) => price1 <= price2);
+                comparePriceDelegate: (decimal price1, decimal price2) => price1 <= price2,
+                context: context);
             }
             else
             {
@@ -86,14 +92,16 @@ namespace StockMarket.Domain
                 order: order,
                 orders: sellOrders,
                 matchingOrders: buyOrders,
-                comparePriceDelegate: (decimal price1, decimal price2) => price1 >= price2);
+                comparePriceDelegate: (decimal price1, decimal price2) => price1 >= price2,
+                context: context);
             }
         }
 
         private void matchOrder(Order order,
                                 PriorityQueue<Order, Order> orders,
                                 PriorityQueue<Order, Order> matchingOrders,
-                                Func<decimal, decimal, bool> comparePriceDelegate)
+                                Func<decimal, decimal, bool> comparePriceDelegate,
+                                MatchContext? context)
         {
             while ((matchingOrders.Count > 0) && (order.Quantity > 0) && comparePriceDelegate(matchingOrders.Peek().Price, order.Price))
             {
@@ -105,7 +113,7 @@ namespace StockMarket.Domain
                     continue;
                 }
 
-                makeTrade(peekedOrder, order);
+                makeTrade(peekedOrder, order, context);
 
                 if (peekedOrder.Quantity == 0) matchingOrders.Dequeue();
             }
@@ -113,7 +121,7 @@ namespace StockMarket.Domain
             if (order.Quantity > 0) orders.Enqueue(order, order);
         }
 
-        private void makeTrade(Order order1, Order order2)
+        private void makeTrade(Order order1, Order order2, MatchContext? context)
         {
             var matchingOrders = findOrders(order1, order2);
             var minQuantity = Math.Min(matchingOrders.SellOrder.Quantity, matchingOrders.BuyOrder.Quantity);
@@ -130,9 +138,9 @@ namespace StockMarket.Domain
             matchingOrders.SellOrder.DecreaseQuantity(minQuantity);
             matchingOrders.BuyOrder.DecreaseQuantity(minQuantity);
 
-            resultContext?.createdTrades.Add(trade);
-            resultContext?.updatedOrders.Add(matchingOrders.BuyOrder);
-            resultContext?.updatedOrders.Add(matchingOrders.SellOrder);
+            context?.createdTrades.Add(trade);
+            context?.updatedOrders.Add(matchingOrders.BuyOrder);
+            context?.updatedOrders.Add(matchingOrders.SellOrder);
         }
 
         private static (Order SellOrder, Order BuyOrder) findOrders(Order order1, Order order2)
@@ -140,5 +148,6 @@ namespace StockMarket.Domain
             if (order1.Side == TradeSide.Sell) return (SellOrder: order1, BuyOrder: order2);
             return (SellOrder: order2, BuyOrder: order1);
         }
+
     }
 }

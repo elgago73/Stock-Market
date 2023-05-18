@@ -4,6 +4,10 @@ namespace StockMarket.Domain.States
     {
         protected readonly StockMarketProcessorWithState stockMarket;
 
+        public IEnumerable<Order> Orders => throw new NotImplementedException();
+
+        public IEnumerable<Trade> Trades => throw new NotImplementedException();
+
         internal StockMarketState(StockMarketProcessorWithState stockMarket)
         {
             this.stockMarket = stockMarket;
@@ -19,7 +23,7 @@ namespace StockMarket.Domain.States
             throw new NotImplementedException();
         }
 
-        public virtual Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity)
+        public virtual Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity, Guid? refId = null)
         {
             throw new NotImplementedException();
         }
@@ -30,6 +34,11 @@ namespace StockMarket.Domain.States
         }
 
         public virtual Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MatchContext? GetContextBy(Guid refId)
         {
             throw new NotImplementedException();
         }

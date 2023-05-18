@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using StockMarket.API.Controllers;
 using StockMarket.Data;
-using StockMarket.Domain.Reposities;
 using StockMarket.Data.Repositories;
 using StockMarket.Service;
 using StockMarket.Service.Contract;
@@ -16,11 +14,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IStockMarketService, StockMarketService>();
-builder.Services.AddDbContext<StockMarketDbContext>(b => b.UseSqlServer("server=.\\sqlexpress;database=StockMarketTest;MultipleActiveResultSets=true;trusted_connection=true;encrypt=yes;trustservercertificate=yes;"));
+builder.Services.AddDbContext<StockMarketDbContext>(b => b.UseSqlServer("server=.\\sqlexpress;database=StockMarket;MultipleActiveResultSets=true;trusted_connection=true;encrypt=yes;trustservercertificate=yes;"));
 builder.Services.AddScoped<IOrderReadRepository, OrderReadRepository>();
 builder.Services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
 builder.Services.AddSingleton<IStockMarketProcessorFactory, StockMarketProcessorFactroy>();
 builder.Services.AddScoped<ITradeReadRepository, TradeReadRepository>();
+builder.Services.AddScoped<ITradeWriteRepository, TradeWriteRepository>();
 
 
 var app = builder.Build();

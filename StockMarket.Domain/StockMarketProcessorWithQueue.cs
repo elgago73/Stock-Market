@@ -12,9 +12,9 @@ namespace StockMarket.Domain
             marketQueue = new();
         }
 
-        public virtual async Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity)
+        public virtual async Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity, Guid? refId = null)
         {
-            return await marketQueue.ExecuteAsync(new EnqueueCommand(this, side, price, quantity));
+            return await marketQueue.ExecuteAsync(new EnqueueCommand(this, side, price, quantity, refId));
         }
 
         public virtual async Task<long> CancelOrderAsync(long orderId)

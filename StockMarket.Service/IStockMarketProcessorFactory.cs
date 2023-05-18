@@ -1,5 +1,4 @@
 ﻿using StockMarket.Domain;
-using StockMarket.Domain.Reposities;
 using StockMarket.Domain.Repositories;
 
 namespace StockMarket.Service

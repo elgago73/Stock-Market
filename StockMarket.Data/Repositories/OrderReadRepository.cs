@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockMarket.Domain;
-using StockMarket.Domain.Reposities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using StockMarket.Domain.Repositories;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StockMarket.Data.Repositories
 {

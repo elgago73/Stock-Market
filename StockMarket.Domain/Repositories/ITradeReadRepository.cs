@@ -2,6 +2,8 @@
 {
     public interface ITradeReadRepository
     {
+
+        Task<IEnumerable<Trade>> GetAllTradesAsync();
         Task<long> GetLastTradeIdAsync();
     }
 }

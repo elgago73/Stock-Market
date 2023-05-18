@@ -15,9 +15,9 @@ namespace StockMarket.Domain.States
             stockMarket.closeMarket();
         }
 
-        public override async Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity)
+        public override async Task<long> EnqueueOrderAsync(TradeSide side, decimal price, decimal quantity, Guid? refId = null)
         {
-            return await stockMarket.enqueueOrderAsync(side, price, quantity);
+            return await stockMarket.enqueueOrderAsync(side, price, quantity, refId);
         }
 
         public override async Task<long> CancelOrderAsync(long orderId)

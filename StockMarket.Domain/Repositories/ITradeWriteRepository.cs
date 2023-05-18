@@ -2,5 +2,6 @@
 {
     public interface ITradeWriteRepository
     {
+        Task AddAsync(IEnumerable<Trade> createdTrades);
     }
 }
