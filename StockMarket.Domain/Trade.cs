@@ -1,4 +1,6 @@
-﻿namespace StockMarket.Domain
+﻿using System.Runtime.InteropServices;
+
+namespace StockMarket.Domain
 {
     public class Trade
     {
@@ -16,6 +18,10 @@
             BuyOrderId = buyOrderId;
             Price = price;
             Quantity = quantity;
+        }
+        internal Trade Clone()
+        {
+            return new Trade(Id, SellOrderId, BuyOrderId, Price, Quantity);
         }
     }
 }

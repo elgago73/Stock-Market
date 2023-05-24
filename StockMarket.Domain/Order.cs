@@ -9,12 +9,13 @@
         public bool IsCanceled { get; private set; }
         private byte[]? version;
 
-        internal Order(long id, TradeSide side, decimal price, decimal quantity)
+        internal Order(long id, TradeSide side, decimal price, decimal quantity, bool isCanceled = false)
         {
             Id = id;
             Side = side;
             Price = price;
             Quantity = quantity;
+            IsCanceled = isCanceled;
         }
 
         internal void DecreaseQuantity(decimal amount)
@@ -34,6 +35,10 @@
             Quantity = order.Quantity;
             IsCanceled = order.IsCanceled;
 
+        }
+        internal Order Clone()
+        {
+            return new Order(Id, Side, Price, Quantity, IsCanceled);
         }
     }
 }

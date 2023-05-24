@@ -33,14 +33,15 @@ namespace StockMarket.Domain
             return await state.EnqueueOrderAsync(side, price, quantity, refId);
         }
 
-        public override async Task<long> CancelOrderAsync(long orderId)
+        public override async Task<long> CancelOrderAsync(long orderId, Guid? refId = null)
         {
-            return await state.CancelOrderAsync(orderId);
+            return await state.CancelOrderAsync(orderId, refId); 
+
         }
 
-        public override async Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity)
+        public override async Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity, Guid? refId = null)
         {
-            return await state.ModifyOrderAsync(orderId, price, quantity);
+            return await state.ModifyOrderAsync(orderId, price, quantity, refId);
         }
 
         internal void openMarket()
@@ -58,14 +59,14 @@ namespace StockMarket.Domain
             return await base.EnqueueOrderAsync(side, price, quantity, refId);
         }
 
-        internal async Task<long> cancelOrderAsync(long orderId)
+        internal async Task<long> cancelOrderAsync(long orderId, Guid? refId = null)
         {
-            return await base.CancelOrderAsync(orderId);
+            return await base.CancelOrderAsync(orderId , refId);
         }
 
-        internal async Task<long> modifyOrderAsync(long orderId, decimal price, decimal quantity)
+        internal async Task<long> modifyOrderAsync(long orderId, decimal price, decimal quantity, Guid? refId = null)
         {
-            return await base.ModifyOrderAsync(orderId, price, quantity);
+            return await base.ModifyOrderAsync(orderId, price, quantity, refId);
         }
     }
 }

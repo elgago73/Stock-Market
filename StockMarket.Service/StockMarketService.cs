@@ -39,12 +39,25 @@ namespace StockMarket.Service
                                                                 quantity: order.Quantity,
                                                                 refId: refId);
 
-            var result = stockMarketProcessor.GetContextBy(refId);
+            var result = stockMarketProcessor.TakeContextBy(refId);
 
             if (result?.CreatedOrder != null) await orderWriteRepository.AddAsync(result.CreatedOrder);
             await orderWriteRepository.UpdateAsync(result.UpdatedOrders);
             await tradeWriteRepository.AddAsync(result.CreatedTrades);
             await orderWriteRepository.SaveChangesAsync();
+            return orderId;
+        }
+
+        public async Task<long> CancleOrderAsync(long id)
+        {
+            var refId = Guid.NewGuid();
+            var orderId = await stockMarketProcessor.CancelOrderAsync(id, refId);
+
+            var result = stockMarketProcessor.TakeContextBy(refId);
+            
+            await orderWriteRepository.UpdateAsync(result.UpdatedOrders);
+            await orderWriteRepository.SaveChangesAsync();
+            
             return orderId;
         }
 
@@ -65,6 +78,28 @@ namespace StockMarket.Service
             var order = await orderReadRepository.GetAsync(id);
             return order?.ToData();
 
+        }
+
+        public async Task<TradeResponse?> GetTradeAsync(long id)
+        {
+
+            var trade = await tradeReadRepository.GetAsync(id);
+            return trade?.ToData();
+        }
+
+        public async Task<long> ModifyOrderAsync(long id, ModifyOrderRequest order)
+        {
+
+            var refId = Guid.NewGuid();
+            var orderId = await stockMarketProcessor.ModifyOrderAsync(id, order.Price, order.Quantity, refId);
+
+            var result = stockMarketProcessor.TakeContextBy(refId);
+
+            if (result?.CreatedOrder != null) await orderWriteRepository.AddAsync(result.CreatedOrder);
+            await orderWriteRepository.UpdateAsync(result.UpdatedOrders);
+            await tradeWriteRepository.AddAsync(result.CreatedTrades);
+            await orderWriteRepository.SaveChangesAsync();
+            return orderId;
         }
     }
 }

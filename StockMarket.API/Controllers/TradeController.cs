@@ -15,6 +15,14 @@ namespace StockMarket.API.Controllers
             this.stockMarketService = stockMarketService;
         }
 
+
+        [HttpGet("{id}", Name = "GetTradeById")]
+        public async Task<TradeResponse?> GetTradeAsync(long id)
+        {
+            return await stockMarketService.GetTradeAsync(id);
+        }
+
+
         [HttpGet(Name = "GetAllTrades")]
         public async Task<IEnumerable<TradeResponse>> GetAllOrdersAsync()
         {

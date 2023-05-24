@@ -4,7 +4,7 @@
     {
         IEnumerable<Order> Orders { get; }
         IEnumerable<Trade> Trades { get; }
-        MatchContext? GetContextBy(Guid refId);
+        MatchContext? TakeContextBy(Guid refId);
 
     }
 }

@@ -37,34 +37,49 @@ namespace StockMarket.Domain
                 enqueueOrder(order);
             }
         }
-        public MatchContext? GetContextBy(Guid refId)
+        public MatchContext? TakeContextBy(Guid refId)
         {
-            contexts.TryGetValue(refId, out var value);
+            contexts.TryRemove(refId, out var value);
             return value;
         }
 
-        internal long EnqueueOrder(TradeSide side, decimal price, decimal quantity, Guid? refId = null)
+        internal long EnqueueOrder(TradeSide side, decimal price, decimal quantity, Guid? refId = null, MatchContext? context = null)
         {
-            var context = new MatchContext();
+            context ??= new MatchContext();
+
             var order = makeOrder(side, price, quantity);
-            context.createdOrder = order;
+            context.createdOrder = order.Clone();
             enqueueOrder(order, context);
+
             if (refId.HasValue) contexts.TryAdd(refId.Value, context);
+
             return order.Id;
         }
 
-        internal long CancelOrder(long orderId)
+        internal long CancelOrder(long orderId, Guid? refId = null, MatchContext? context = null)
         {
+            context ??= new MatchContext();
+            
             var order = orders.Single(order => order.Id == orderId);
             order.Cancel();
+            context.updatedOrders.Add(order.Clone());
+            
+            if (refId.HasValue) contexts.TryAdd(refId.Value, context);
+
             return order.Id;
         }
 
-        internal long ModifyOrder(long orderId, decimal price, decimal quantity)
+        internal long ModifyOrder(long orderId, decimal price, decimal quantity, Guid? refId = null)
         {
+            var context = new MatchContext();
+
             var order = orders.Single(order => order.Id == orderId);
-            CancelOrder(order.Id);
-            return EnqueueOrder(order.Side, price, quantity);
+            CancelOrder(order.Id, context: context);
+
+            var newOrderId = EnqueueOrder(order.Side, price, quantity, context: context);
+            if (refId.HasValue) contexts.TryAdd(refId.Value, context);
+            
+            return newOrderId;
         }
 
         private Order makeOrder(TradeSide side, decimal price, decimal quantity)
@@ -138,9 +153,9 @@ namespace StockMarket.Domain
             matchingOrders.SellOrder.DecreaseQuantity(minQuantity);
             matchingOrders.BuyOrder.DecreaseQuantity(minQuantity);
 
-            context?.createdTrades.Add(trade);
-            context?.updatedOrders.Add(matchingOrders.BuyOrder);
-            context?.updatedOrders.Add(matchingOrders.SellOrder);
+            context?.createdTrades.Add(trade.Clone());
+            context?.updatedOrders.Add(matchingOrders.BuyOrder.Clone());
+            context?.updatedOrders.Add(matchingOrders.SellOrder.Clone());
         }
 
         private static (Order SellOrder, Order BuyOrder) findOrders(Order order1, Order order2)

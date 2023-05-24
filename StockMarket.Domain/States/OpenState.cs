@@ -20,14 +20,14 @@ namespace StockMarket.Domain.States
             return await stockMarket.enqueueOrderAsync(side, price, quantity, refId);
         }
 
-        public override async Task<long> CancelOrderAsync(long orderId)
+        public override async Task<long> CancelOrderAsync(long orderId, Guid? refId = null)
         {
-            return await stockMarket.cancelOrderAsync(orderId);
+            return await stockMarket.cancelOrderAsync(orderId, refId);
         }
 
-        public override async Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity)
+        public override async Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity, Guid? refId = null)
         {
-            return await stockMarket.modifyOrderAsync(orderId, price, quantity);
+            return await stockMarket.modifyOrderAsync(orderId, price, quantity, refId);
         }
     }
 }

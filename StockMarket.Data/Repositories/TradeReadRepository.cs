@@ -19,6 +19,12 @@ namespace StockMarket.Data.Repositories
 
         }
 
+        public async Task<Trade?> GetAsync(long id)
+        {
+            return await dbContext.Trades.AsNoTracking().SingleOrDefaultAsync(t => t.Id == id);
+
+        }
+
         public async Task<long> GetLastIdAsync()
         {
             // MaxAsync vs LastAsync ?

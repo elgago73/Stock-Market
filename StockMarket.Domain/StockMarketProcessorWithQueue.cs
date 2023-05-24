@@ -17,14 +17,14 @@ namespace StockMarket.Domain
             return await marketQueue.ExecuteAsync(new EnqueueCommand(this, side, price, quantity, refId));
         }
 
-        public virtual async Task<long> CancelOrderAsync(long orderId)
+        public virtual async Task<long> CancelOrderAsync(long orderId, Guid? refId = null)
         {
-            return await marketQueue.ExecuteAsync(new CancelCommand(this, orderId));
+            return await marketQueue.ExecuteAsync(new CancelCommand(this, orderId, refId));
         }
 
-        public virtual async Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity)
+        public virtual async Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity, Guid? refId = null)
         {
-            return await marketQueue.ExecuteAsync(new ModifyCommand(this, orderId, price, quantity));
+            return await marketQueue.ExecuteAsync(new ModifyCommand(this, orderId, price, quantity, refId));
         }
     }
 }

@@ -28,19 +28,20 @@ namespace StockMarket.Domain.States
             throw new NotImplementedException();
         }
 
-        public virtual Task<long> CancelOrderAsync(long orderId)
+        public virtual Task<long> CancelOrderAsync(long orderId, Guid? refId = null)
         {
             throw new NotImplementedException();
         }
 
-        public virtual Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity)
+        public virtual Task<long> ModifyOrderAsync(long orderId, decimal price, decimal quantity, Guid? refId = null)
         {
             throw new NotImplementedException();
         }
 
-        public MatchContext? GetContextBy(Guid refId)
+        public MatchContext? TakeContextBy(Guid refId)
         {
             throw new NotImplementedException();
         }
+
     }
 }
